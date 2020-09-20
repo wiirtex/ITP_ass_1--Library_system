@@ -1,62 +1,111 @@
+/**********************************************************************
+
+Timur Iakhshigulov. BS20-06. Innopolis University, Innopolis, Russia. the end of project: 20.09.2020
+
+***********************************************************************/
+
 #define _CRT_SECURE_NO_WARNINGS 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-struct Customer {
+
+/**********************************************************************
+
+My linked list is working kind of strange. Nobody know where is the end of it.
+So, the append()-function, like others goes through full list to get to the last element.
+
+So every operation with my linked list is working with time of O(n);
+
+I have 2 different lists for Customers and Books, so we have two sets of almost identically functions for both categories (for ex. append_c() and append_b()).
+This makes code longer.
+
+Linked list contains all elements and one null element, which is head of list:
+	head -> first_elem -> second_elem -> ... -> last_elem -> NULL
+
+***********************************************************************/
+
+
+struct Customer {		// Customer structure
 	char name[50];
 	int age;
 	float customer_rate;
 	struct Customer* next;
 };
 
-typedef struct Customer user;
+typedef struct Customer user; // now struct Customer is user
 
 void append_c(user* head, char name[50], int age, float customer_rate) {
+	/*
+		append_c is creating new Customer and appending it to the end of list.
 
+		:: user* head - pointer to the null element of the customers list
+		:: char name[50] - name of Customer
+		:: int age - age of Customer (any integer)
+		:: float customer_rate - customer's rate (any float)
+	*/
 	if (head->next == NULL) {
-		user* new_nd = (user*)(malloc(sizeof(user)));
-		new_nd->next = NULL;
+		/*
+			If  list is empty, my program does this:
+				head -> new_elem;
+		*/
+		user* new_nd = (user*)(malloc(sizeof(user))); // new_nd = new node of linked list
+		new_nd->next = NULL; // new_elem = last_elem => new_elem -> NULL
 		strcpy(new_nd->name, name);
 		new_nd->age = age;
 		new_nd->customer_rate = customer_rate;
 		(head)->next = new_nd;
 		return;
 	}
+	/*
+			Else, my program does this:
+				last_elem -> new_elem;
+	*/
 	user* now = head->next;
 	while (now->next != NULL) {
-		now = now->next;
+		now = now->next;	//iterating until last element
 	}
-	user* new_nd = (user*)(malloc(sizeof(user)));
+	user* new_nd = (user*)(malloc(sizeof(user)));	// new_nd = new node of linked list
 	new_nd->next = NULL;
 	strcpy(new_nd->name, name);
 	new_nd->age = age;
 	new_nd->customer_rate = customer_rate;
-	now->next = new_nd;
+	now->next = new_nd;		// now = last_elem -> new node
 	return;
 }
 
 void print_c(user* head) {
-	printf("\n<----------------------->\nCustomers in System:\n\n");
+	/*
+		print_c() prints all elements of list of Customers from first till last
+
+		:: user* head - pointer to the null element of the customers list
+	*/
+	printf("\n<----------------------->\nCustomers in System:\n\n");	// printing some visual things
 	if (head->next == NULL) {
-		printf("The library is empty for now. Sorry");
+		printf("The library is empty for now. Sorry");					// if library is empty now (head -> NULL = last_elem)
 	}
 	else {
-		user now = *(head->next);
+		user now = *(head->next);										// take and prints first element
 		printf("%s, age: %d; rate: %.2f\n", now.name, now.age, now.customer_rate);
 		while (now.next != NULL) {
-			now = *(now.next);
+			now = *(now.next);											// take and prints all elements except first
 			printf("%s, age: %d; rate: %.2f\n", now.name, now.age, now.customer_rate);
 		}
 	}
-	printf("\n<----------------------->\n\n");
+	printf("\n<----------------------->\n\n");	// printing some visual things
 }
 
 void remove_c(user* head, char name[50]) {
-	if (head->next == NULL) {
-		return;
-	}
-	user* now = head->next;
+	/*
+		remove_c() is deleting Customer with EXACT name from library. If there is not that name in library it returns to MAIN MENU;
+
+		:: user* head - pointer to the null element of the customers list
+		:: char name[50] - name of Customer who should be deleted
+	*/
+
+	// this fuction should be called only after the checking, that list is not empty
+
+	user* now = head->next;		// iterating all 
 	user* prev = head;
 	while (strcmp(now->name, name) != 0) {
 		if (now->next == NULL) {
@@ -258,7 +307,7 @@ void remove_book(struct Book* head) {
 	if (head->next == NULL) {
 		printf("\nThere are no books in library. Nothing to edit\n\n");
 		return;
-	
+
 	}
 	char title_to_edit[60];
 	printf("\nPlease, write the title of the book, that you want to edit: ");
