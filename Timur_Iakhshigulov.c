@@ -17,7 +17,7 @@ So, the append()-function, like others goes through full list to get to the last
 
 So every operation with my linked list is working with time of O(n);
 
-I have 2 different lists for Customers and Books, so we have two sets of almost identically functions for both categories (for ex. append_c() and append_b()).
+I have 2 different lists for Customers and Books, so we have two sets of almost identically functions for both categories (for ex. append_c() and append_b()). 
 This makes code longer.
 
 Linked list contains all elements and one null element, which is head of list:
@@ -37,7 +37,7 @@ typedef struct Customer user; // now struct Customer is user
 
 void append_c(user* head, char name[50], int age, float customer_rate) {
 	/*
-		append_c is creating new Customer and appending it to the end of list.
+		append_c is creating new Customer and appending it to the end of list. 
 
 		:: user* head - pointer to the null element of the customers list
 		:: char name[50] - name of Customer
@@ -49,12 +49,12 @@ void append_c(user* head, char name[50], int age, float customer_rate) {
 			If  list is empty, my program does this:
 				head -> new_elem;
 		*/
-		user* new_nd = (user*)(malloc(sizeof(user))); // new_nd = new node of linked list
-		new_nd->next = NULL; // new_elem = last_elem => new_elem -> NULL
-		strcpy(new_nd->name, name);
-		new_nd->age = age;
-		new_nd->customer_rate = customer_rate;
-		(head)->next = new_nd;
+		user* new_user = (user*)(malloc(sizeof(user))); // new_nd = new node of linked list
+		new_user->next = NULL; // new_elem = last_elem => new_elem -> NULL
+		strcpy(new_user->name, name);
+		new_user->age = age;
+		new_user->customer_rate = customer_rate;
+		(head)->next = new_user;
 		return;
 	}
 	/*
@@ -65,12 +65,12 @@ void append_c(user* head, char name[50], int age, float customer_rate) {
 	while (now->next != NULL) {
 		now = now->next;	//iterating until last element
 	}
-	user* new_nd = (user*)(malloc(sizeof(user)));	// new_nd = new node of linked list
-	new_nd->next = NULL;
-	strcpy(new_nd->name, name);
-	new_nd->age = age;
-	new_nd->customer_rate = customer_rate;
-	now->next = new_nd;		// now = last_elem -> new node
+	user* new_user = (user*)(malloc(sizeof(user)));	// new_nd = new node of linked list
+	new_user->next = NULL;
+	strcpy(new_user->name, name);
+	new_user->age = age;
+	new_user->customer_rate = customer_rate;
+	now->next = new_user;		// now = last_elem -> new node
 	return;
 }
 
@@ -95,53 +95,70 @@ void print_c(user* head) {
 	printf("\n<----------------------->\n\n");	// printing some visual things
 }
 
-void remove_c(user* head, char name[50]) {
+int remove_c(user* head, char name[50]) {
 	/*
 		remove_c() is deleting Customer with EXACT name from library. If there is not that name in library it returns to MAIN MENU;
 
 		:: user* head - pointer to the null element of the customers list
 		:: char name[50] - name of Customer who should be deleted
+
+		Returns 0 if removing failed, else 1.
 	*/
 
 	// this fuction should be called only after the checking, that list is not empty
 
-	user* now = head->next;		// iterating all 
+	user* now = head->next;		// iterating through all customers
 	user* prev = head;
-	while (strcmp(now->name, name) != 0) {
-		if (now->next == NULL) {
-			return;
+	while (strcmp(now->name, name) != 0) {	// tryind to find that we should remove
+		if (now->next == NULL) {			// if get to the end of array we just return;
+			return 0;
 		}
 		prev = now;
 		now = now->next;
 	}
-	prev->next = now->next;
-	free(now);
-	return;
+	prev->next = now->next;		// connect previous and next
+	free(now);					// make memory free again
+	return 1;
 }
 
 void update_customer(user* head) {
-	if (head->next == NULL) {
-		printf("\nThere are no customers in library. Nothing to edit\n\n");
+	/*
+		update_customer() - updating (but not necessary) any information about the customer. 
+			Identifies a the customer using his (or her) name. 
+
+		:: head - starting node of the list of customers
+	*/
+	if (head->next == NULL) {		// if the list is empty
+		printf("\nThere are no customers in library. Noone can be edited\n\n");
 		return;
 	}
 	char prev_name[50];
 	printf("\nPlease, write the name of the customer, that you want to edit: ");
 	scanf("%*c");
 	gets(prev_name);
-	user* now = head->next;
-	while (strcmp(now->name, prev_name) != 0) {
-		if (now->next == NULL) {
+	user* now = head->next;			// iterating through all customers
+	while (strcmp(now->name, prev_name) != 0) {		// tryind to find that we should update
+		if (now->next == NULL) {					// if get to the end of array we just return;
 			printf("\nThis book is not in the library\n");
 			return;
 		}
 		now = now->next;
 	}
-	char tmp[50];
-	char author[50];
-	int age;
-	float customer_rate;
+	char tmp[50];			        //
+	char author[50];			   // Locale variables for updating (or not) a customer
+	auto int age;				  //
+	float customer_rate;		 //
 	printf("Editing a customer %s:  -- If you want to edit identifier, write it. If not, write a '0' --\nName: ", now->name);
-	//scanf("%*c");
+	/*
+			If you don't want to edit some information about the customer, you can just type 0, and his information 
+				will not change.
+
+			Why 0?
+			  - because no title or author's name starting with 0
+			  - because there is no year with zero number
+			  - because in float we have less, than 5 digits after the point
+				
+	*/
 	gets(tmp);
 	if (tmp[0] != '0') {
 		strcpy(now->name, tmp);
@@ -153,7 +170,7 @@ void update_customer(user* head) {
 	}
 	printf("Customer rate: ");
 	scanf("%f", &customer_rate);
-	if (customer_rate > 1e-5) {
+	if (customer_rate > 1e-6) {
 		now->customer_rate = customer_rate;
 	}
 
@@ -161,7 +178,13 @@ void update_customer(user* head) {
 }
 
 void remove_customer(user* head) {
-	if (head->next == NULL) {
+	/*
+		remove_customer() - remove all information about the customer
+			Identifies a the customer using his (or her) name.
+
+		:: head - starting node of the list of customers
+	*/
+	if (head->next == NULL) {	// checking if list is empty
 		printf("\nThere are no customers in the library. Noone can be removed\n\n");
 		return;
 	}
@@ -169,17 +192,26 @@ void remove_customer(user* head) {
 	printf("\nPlease, write the name of the customer, whose information you want to remove: ");
 	scanf("%*c");
 	gets(name_to_remove);
-	remove_c(head, name_to_remove);
-	printf("\nRemoved!\n");
+	if (remove_c(head, name_to_remove)) {
+		printf("\nRemoved!\n");
+	}
+	else {
+		printf("\nThis customer is not in library!\n");
+	}
 	return;
 }
 
 void add_user(user* head) {
+	/*
+		add_user() - adding new customer
+
+		:: head - starting node of the list of customers
+	*/
 	char name[50];
 	int age;
 	float customer_rate;
 	printf("\nAdding a customer:\nName: ");
-	scanf("%*c");
+	scanf("%*c");		// for parse \n
 	gets(&name);
 	printf("Age: ");
 	scanf("%d", &age);
@@ -197,7 +229,15 @@ struct Book {
 };
 
 int append_b(struct Book* head, char title[60], char author[50], int year, float book_rate) {
+	/*
+		append_b is creating new Book and appending it to the end of list.
 
+		:: struct Book* head - pointer to the null element of the customers list
+		:: char title[60] - title of the Book
+		:: char author[50] - name of the Author
+		:: int year -  (any integer)
+		:: float book_rate - customer's rate (any float)
+	*/
 	if (head->next == NULL) {
 		struct Book* new_nd = (struct Book*)(malloc(sizeof(struct Book)));
 		new_nd->next = NULL;
@@ -246,14 +286,14 @@ int remove_b(struct Book* head, char title[60]) {
 	struct Book* prev = head;
 	while (strcmp(now->title, title) != 0) {
 		if (now->next == NULL) {
-			return;
+			return 0;
 		}
 		prev = now;
 		now = now->next;
 	}
 	prev->next = now->next;
 	free(now);
-	return 0;
+	return 1;
 }
 
 void update_book(struct Book* head) {
@@ -305,16 +345,20 @@ void update_book(struct Book* head) {
 
 void remove_book(struct Book* head) {
 	if (head->next == NULL) {
-		printf("\nThere are no books in library. Nothing to edit\n\n");
+		printf("\nThere are no books in library. Nothing to remove\n\n");
 		return;
-
+	
 	}
 	char title_to_edit[60];
-	printf("\nPlease, write the title of the book, that you want to edit: ");
+	printf("\nPlease, write the title of the book, that you want to remove: ");
 	scanf("%*c");
 	gets(title_to_edit);
-	remove_b(head, title_to_edit);
-	printf("\nRemoved!\n");
+	if (remove_b(head, title_to_edit)) {
+		printf("\nRemoved!\n");
+	}
+	else {
+		printf("\nThis book is not in library!\n");
+	}
 	return;
 }
 
