@@ -203,7 +203,7 @@ void remove_customer(user* head) {
 
 void add_user(user* head) {
 	/*
-		add_user() - adding new customer
+		add_user() - adding new customer, before getting useful info and then call an append_c()
 
 		:: head - starting node of the list of customers
 	*/
@@ -238,7 +238,7 @@ int append_b(struct Book* head, char title[60], char author[50], int year, float
 		:: int year -  (any integer)
 		:: float book_rate - customer's rate (any float)
 	*/
-	if (head->next == NULL) {
+	if (head->next == NULL) {	// if list is empty, then we should create first element
 		struct Book* new_nd = (struct Book*)(malloc(sizeof(struct Book)));
 		new_nd->next = NULL;
 		strcpy(new_nd->title, title);
@@ -248,6 +248,7 @@ int append_b(struct Book* head, char title[60], char author[50], int year, float
 		(head)->next = new_nd;
 		return -1;
 	}
+	// if list is not empty, then we should create new element after the last element
 	struct Book* now = head->next;
 	while (now->next != NULL) {
 		now = now->next;
@@ -263,11 +264,16 @@ int append_b(struct Book* head, char title[60], char author[50], int year, float
 }
 
 void print_b(struct Book* head) {
+	/*
+		print_b() prints all elements of list of Books from first till last
+
+		:: struct Book* head - pointer to the null element of the customers list
+	*/
 	printf("\n<----------------------->\nBooks in System:\n\n");
-	if (head->next == NULL) {
+	if (head->next == NULL) {	//if list is empty
 		printf("The library is empty for now. Sorry");
 	}
-	else {
+	else {	// if not, then printing
 		struct Book now = *(head->next);
 		printf("%s, %s, %d year; rate: %.2f\n", now.author, now.title, now.year, now.book_rate);
 		while (now.next != NULL) {
@@ -279,33 +285,48 @@ void print_b(struct Book* head) {
 }
 
 int remove_b(struct Book* head, char title[60]) {
-	if (head->next == NULL) {
-		return -1;
-	}
+	/*
+		remove_b() is deleting Book with EXACT name from library. If there is not that name in library it returns to MAIN MENU;
+
+		:: struct Book* head - pointer to the null element of the books list
+		:: char title[60] - name of Customer who should be deleted
+
+		Returns 0 if removing failed, else 1.
+	*/
+
+	// this function should be called only after checking that list is not empty
+
 	struct Book* now = head->next;
 	struct Book* prev = head;
-	while (strcmp(now->title, title) != 0) {
+	while (strcmp(now->title, title) != 0) {		// iterating through all elements
 		if (now->next == NULL) {
 			return 0;
 		}
 		prev = now;
 		now = now->next;
 	}
-	prev->next = now->next;
+	prev->next = now->next;							// connecting previous element with new
 	free(now);
 	return 1;
 }
 
 void update_book(struct Book* head) {
-	if (head->next == NULL) {
+	/*
+		update_book() - updating (but not necessary) any information about the book.
+			Identifies a the book using his (or her) title.
+
+		:: head - starting node of the list of books
+	*/
+	if (head->next == NULL) {		// if list is empty
 		printf("\nThere are no books in library. Nothing to edit\n\n");
 		return;
 	}
+	// else:
 	char prev_title[60];
 	printf("\nPlease, write the title of the book, that you want to edit: ");
 	scanf("%*c");
 	gets(prev_title);
-	struct Book* now = head->next;
+	struct Book* now = head->next;		// iterating through all books to find that one
 	while (strcmp(now->title, prev_title) != 0) {
 		if (now->next == NULL) {
 			printf("\nThis book is not in the library\n");
@@ -313,13 +334,20 @@ void update_book(struct Book* head) {
 		}
 		now = now->next;
 	}
+	// local variables
+
+	// <<<<<
+
 	char tmp[60];
 	char title[60];
 	char author[50];
-	int year;
+	auto year;
 	float book_rate;
+
+	// >>>>>
+
 	printf("Editing a book %s:  -- If you want to edit identifier, write it. If not, write a '0' --\nTitle: ", now->title);
-	//scanf("%*c");
+	// this function is almost full copy of the update_customer() which is fully commented
 	gets(tmp);
 	if (tmp[0] != '0') {
 		strcpy(now->title, tmp);
@@ -344,10 +372,15 @@ void update_book(struct Book* head) {
 }
 
 void remove_book(struct Book* head) {
-	if (head->next == NULL) {
+	/*
+		remove_book() - remove all information about the book
+			Identifies a the customer using his (or her) name.
+
+		:: head - starting node of the list of customers
+	*/
+	if (head->next == NULL) {		// if list is empty
 		printf("\nThere are no books in library. Nothing to remove\n\n");
 		return;
-	
 	}
 	char title_to_edit[60];
 	printf("\nPlease, write the title of the book, that you want to remove: ");
@@ -363,6 +396,13 @@ void remove_book(struct Book* head) {
 }
 
 void add_book(struct Book* head) {
+	/*
+		almost full copy of add_customer() which is fully commented
+		
+		add_book() - adding new book, before getting useful info and then call an append_b()
+
+		:: head - starting node of the list of customers
+	*/
 	char title[60];
 	char author[50];
 	int year;
@@ -379,11 +419,21 @@ void add_book(struct Book* head) {
 	append_b(head, title, author, year, book_rate);
 }
 
-int main() {
+void output_hello_message() {
 	printf("The Linked List Library System by Timur Iakhshigulov t.iakhshigulov@innopolis.university\nInnopolis University, Russia\n2020 year\n\nAny key to continue.\n");
 	scanf("%*c");
 	printf("Menu:\n    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
 	printf("\n    5: Show Customers;\n    6: Add new Customer;\n    7: Update a Customer;\n    8: Update a Customer;\n    9: Exit;\n");
+
+}
+
+void print_help() {
+	printf("    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
+	printf("\n    5: Show Customers;\n    6: Add new Customer;\n    7: Update a Customer;\n    8: Update a Customer;\n    9: Exit;\n\n");
+	printf("Print number of function to start work.\n\n");
+}
+
+void loop() {
 	struct Book null_book = { "", "", 0, 0, NULL };
 	user null_customer = { "", 0, 0, NULL };
 	int command = 0;
@@ -428,9 +478,7 @@ int main() {
 			break;
 		}
 		case 0: {
-			printf("    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
-			printf("\n    5: Show Customers;\n    6: Add new Customer;\n    7: Update a Customer;\n    8: Update a Customer;\n    9: Exit;\n\n");
-			printf("Print number of function to start work.\n\n");
+			print_help();
 			break;
 		}
 		default:
@@ -438,6 +486,18 @@ int main() {
 			break;
 		}
 	} while (command != 9);
+}
+
+void output_goodbye_message() {
 	printf("Thank you for using our library system. \n");
+}
+
+int main() {
+	output_hello_message();
+	
+	loop();
+	
+	output_goodbye_message();
+
 	return 0;
 }
