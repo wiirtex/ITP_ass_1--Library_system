@@ -17,7 +17,7 @@ So, the append()-function, like others goes through full list to get to the last
 
 So every operation with my linked list is working with time of O(n);
 
-I have 2 different lists for Customers and Books, so we have two sets of almost identically functions for both categories (for ex. append_c() and append_b()). 
+I have 2 different lists for Customers and Books, so we have two sets of almost identically functions for both categories (for ex. append_c() and append_b()).
 This makes code longer.
 
 Linked list contains all elements and one null element, which is head of list:
@@ -25,6 +25,7 @@ Linked list contains all elements and one null element, which is head of list:
 
 ***********************************************************************/
 
+auto random_useless_variable = 1;	// this variable is not used in the program
 
 struct Customer {		// Customer structure
 	char name[50];
@@ -37,7 +38,7 @@ typedef struct Customer user; // now struct Customer is user
 
 void append_c(user* head, char name[50], int age, float customer_rate) {
 	/*
-		append_c is creating new Customer and appending it to the end of list. 
+		append_c is creating new Customer and appending it to the end of list.
 
 		:: user* head - pointer to the null element of the customers list
 		:: char name[50] - name of Customer
@@ -123,8 +124,8 @@ int remove_c(user* head, char name[50]) {
 
 void update_customer(user* head) {
 	/*
-		update_customer() - updating (but not necessary) any information about the customer. 
-			Identifies a the customer using his (or her) name. 
+		update_customer() - updating (but not necessary) any information about the customer.
+			Identifies a the customer using his (or her) name.
 
 		:: head - starting node of the list of customers
 	*/
@@ -148,16 +149,14 @@ void update_customer(user* head) {
 	char author[50];			   // Locale variables for updating (or not) a customer
 	auto int age;				  //
 	float customer_rate;		 //
-	printf("Editing a customer %s:  -- If you want to edit identifier, write it. If not, write a '0' --\nName: ", now->name);
+	printf("Editing a customer %s:  -- If you want to edit identifier, write it. If not (except customer rate), write a '0' --\nName: ", now->name);
 	/*
-			If you don't want to edit some information about the customer, you can just type 0, and his information 
+			If you don't want to edit some information about the customer, you can just type 0, and his information
 				will not change.
 
 			Why 0?
 			  - because no title or author's name starting with 0
 			  - because there is no year with zero number
-			  - because in float we have less, than 5 digits after the point
-				
 	*/
 	gets(tmp);
 	if (tmp[0] != '0') {
@@ -170,9 +169,7 @@ void update_customer(user* head) {
 	}
 	printf("Customer rate: ");
 	scanf("%f", &customer_rate);
-	if (customer_rate > 1e-6) {
-		now->customer_rate = customer_rate;
-	}
+	now->customer_rate = customer_rate;
 
 	printf("Edited!\n");
 }
@@ -346,7 +343,7 @@ void update_book(struct Book* head) {
 
 	// >>>>>
 
-	printf("Editing a book %s:  -- If you want to edit identifier, write it. If not, write a '0' --\nTitle: ", now->title);
+	printf("Editing a book %s:  -- If you want to edit identifier, write it. If not (except book rate), write a '0' --\nTitle: ", now->title);
 	// this function is almost full copy of the update_customer() which is fully commented
 	gets(tmp);
 	if (tmp[0] != '0') {
@@ -364,9 +361,7 @@ void update_book(struct Book* head) {
 	}
 	printf("Book rate: ");
 	scanf("%f", &book_rate);
-	if (book_rate > 1e-5) {
-		now->book_rate = book_rate;
-	}
+	now->book_rate = book_rate;
 
 	printf("Edited!\n");
 }
@@ -398,7 +393,7 @@ void remove_book(struct Book* head) {
 void add_book(struct Book* head) {
 	/*
 		almost full copy of add_customer() which is fully commented
-		
+
 		add_book() - adding new book, before getting useful info and then call an append_b()
 
 		:: head - starting node of the list of customers
@@ -420,6 +415,9 @@ void add_book(struct Book* head) {
 }
 
 void output_hello_message() {
+	/*
+		output_hello_message() printing information about creator, and printing the menu
+	*/
 	printf("The Linked List Library System by Timur Iakhshigulov t.iakhshigulov@innopolis.university\nInnopolis University, Russia\n2020 year\n\nAny key to continue.\n");
 	scanf("%*c");
 	printf("Menu:\n    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
@@ -428,15 +426,21 @@ void output_hello_message() {
 }
 
 void print_help() {
+	/*
+			print_help() printing the help menu
+	*/
 	printf("    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
 	printf("\n    5: Show Customers;\n    6: Add new Customer;\n    7: Update a Customer;\n    8: Update a Customer;\n    9: Exit;\n\n");
 	printf("Print number of function to start work.\n\n");
 }
 
 void loop() {
-	struct Book null_book = { "", "", 0, 0, NULL };
-	user null_customer = { "", 0, 0, NULL };
-	int command = 0;
+	/*
+		loop() is main part of the program, that coordinates all the program and allows it to work
+	*/
+	struct Book null_book = { "", "", 0, 0, NULL };		// initialising the null element of Books-List
+	user null_customer = { "", 0, 0, NULL };			// initialising the null element of	Customers-List
+	int command = 0;									// initialising the command variable
 	do {
 		printf("\nPlease, write a new command. 0 for help\n");
 		printf("command: ");
@@ -489,14 +493,17 @@ void loop() {
 }
 
 void output_goodbye_message() {
-	printf("Thank you for using our library system. \n");
+	/*
+			output_goodbye_message() printing goodbye message
+	*/
+	printf("\nThank you for using our library system. \n");
 }
 
 int main() {
 	output_hello_message();
-	
+
 	loop();
-	
+
 	output_goodbye_message();
 
 	return 0;
