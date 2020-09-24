@@ -7,4 +7,5 @@ Auto manager for library.
 | --- | --- |
 | 17.09.2020 | starting the project |
 | 20.09.2020 | main functionality is ready | 
-| 23.09.2020 | all comments are ready, minor fixes of functionality| 
+| 23.09.2020 | all comments are ready, minor fixes of functionality (looks like project is done)| 
+
