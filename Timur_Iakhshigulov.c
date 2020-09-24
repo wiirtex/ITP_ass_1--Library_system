@@ -25,7 +25,7 @@ Linked list contains all elements and one null element, which is head of list:
 
 ***********************************************************************/
 
-auto random_useless_variable = 1;	// this variable is not used in the program
+int random_useless_variable = 1;	// this variable is not used in the program
 
 struct Customer {		// Customer structure
 	char name[50];
@@ -146,7 +146,6 @@ void update_customer(user* head) {
 		now = now->next;
 	}
 	char tmp[50];			        //
-	char author[50];			   // Locale variables for updating (or not) a customer
 	auto int age;				  //
 	float customer_rate;		 //
 	printf("Editing a customer %s:  -- If you want to edit identifier, write it. If not (except customer rate), write a '0' --\nName: ", now->name);
@@ -336,8 +335,6 @@ void update_book(struct Book* head) {
 	// <<<<<
 
 	char tmp[60];
-	char title[60];
-	char author[50];
 	auto year;
 	float book_rate;
 
@@ -429,7 +426,7 @@ void print_help() {
 	/*
 			print_help() printing the help menu
 	*/
-	printf("    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
+	printf("\n    0: Help;\n    1: Show all books in system;\n    2: Add new book;\n    3: Update a book;\n    4: Remove a book;");
 	printf("\n    5: Show Customers;\n    6: Add new Customer;\n    7: Update a Customer;\n    8: Update a Customer;\n    9: Exit;\n\n");
 	printf("Print number of function to start work.\n\n");
 }
@@ -479,6 +476,7 @@ void loop() {
 			break;
 		}
 		case 9: {
+			// This does nothing
 			break;
 		}
 		case 0: {
