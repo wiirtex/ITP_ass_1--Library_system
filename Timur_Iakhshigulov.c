@@ -1,6 +1,6 @@
 /**********************************************************************
 
-Timur Iakhshigulov. BS20-06. Innopolis University, Innopolis, Russia. the end of project: 20.09.2020
+Timur Iakhshigulov. BS20-06. Innopolis University, Innopolis, Russia. the end of the project: 20.09.2020. the REAL end of the project: 24.09.2020
 
 ***********************************************************************/
 
